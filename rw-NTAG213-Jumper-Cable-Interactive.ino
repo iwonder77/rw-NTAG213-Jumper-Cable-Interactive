@@ -1,20 +1,21 @@
-/* 
-* ----------------------------------------------
-* PROJECT NAME: writing-to-rfid-tag
-* Description: programming RFID tags with pos/neg cable identification for jumper cable interactive
-* 
-* Author: Isai Sanchez
-* Date: 8-13-25
-* Board Used: Arduino Nano
-* Libraries:
-*   - Wire.h (I2C communication library): https://docs.arduino.cc/language-reference/en/functions/communication/wire/
-*   - MFRC522v2.h (Main RFID library): https://github.com/OSSLibraries/Arduino_MFRC522v2
-* Hardware:
-*   - Aruino Nano
-*   - M5Stack RFID2 reader
-* Notes:
-*   - Version checking of RFID2 reader bypassed due to WS1850S/MFRC522 differences
-* ----------------------------------------------
+/** 
+ * Project: Jumper Cable Interactive
+ * Description: programming RFID tags with pos/neg cable identification for jumper cable interactive
+ *
+ * Author: Isai Sanchez
+ * Date: 8-13-25
+ * Hardware:
+ *  - MCU: Arduino Nano
+ *  - RFID module: M5Stack RFID2 reader
+ *  - NTAG213: Adafruit NTAG213 tags
+ * Libraries:
+ *  - Wire.h (I2C communication library): https://docs.arduino.cc/language-reference/en/functions/communication/wire/
+ *  - MFRC522v2.h (Main RFID library): https://github.com/OSSLibraries/Arduino_MFRC522v2
+ * Notes:
+ *  - Version checking of RFID2 reader bypassed due to WS1850S/MFRC522 differences
+ *  - Scan mode functionality implemented to ensure tag data was properly set
+ *  
+ * (c) Thanksgiving Point Exhibits Electronics Team — 2025
 */
 
 #include <Wire.h>
