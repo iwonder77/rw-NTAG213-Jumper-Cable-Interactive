@@ -2,7 +2,7 @@
 
 ## Overview
 
-This project contains a simple Arduino sketch used to program and verify [Adafruit's NTAG213](https://www.adafruit.com/product/5458) RFID tags for the Jumper Cable interactive for the Auto Shop in Kidopolis at Thanksgiving Point's Museum of Natural Curiosity.
+This project contains a simple Arduino sketch used to program and verify [Adafruit's NTAG213](https://www.adafruit.com/product/5458) RFID tags for the [Jumper Cable interactive](https://github.com/iwonder77/jumper-cable-rfid-interactive) for the Auto Shop in Kidopolis at Thanksgiving Point's Museum of Natural Curiosity.
 
 The sketch writes structured data to RFID tags representing the positive and negative jumper cable ends used in the interactive. Each tag stores:
 
