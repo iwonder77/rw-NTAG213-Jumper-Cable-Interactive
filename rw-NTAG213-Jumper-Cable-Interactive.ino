@@ -57,10 +57,10 @@ uint8_t calculateChecksum(const uint8_t *data, uint8_t length) {
 }
 
 // ===== READ DATA (STRUCT) FROM TAG =====
-void readStructFromTag(uint8_t startPage) {
+void readStructFromTag() {
   // ==============================
   // MIFARE_Read(byte blockAddr, byte *buffer, byte *bufferSize)
-  // -- byte blockAddr:   replace with page num for NTAG203 tags
+  // -- byte blockAddr:   replace with page num for NTAG213 tags
   // -- byte *buffer:     a buffer is a temporary array in RAM holding the bytes we read from the tag,
   //                      pass in a pointer to the first element of this array, so the function can fill
   //                      it with the tag's data
@@ -69,7 +69,7 @@ void readStructFromTag(uint8_t startPage) {
   //
   // NOTE: function returns 16 bytes (+ 2 bytes CRC_A) from the active PICC
   // -  active PICC means tag must be in the selected state (awake and communicating)
-  // -  since function reads 16 bytes, and pages on our NTAG203 tags have 4 bytes each, this will read
+  // -  since function reads 16 bytes, and pages on our NTAG213 tags have 4 bytes each, this will read
   // -    4 pages on one go and store the information in our buffer (make it at least 18 though for the CRC bytes)
   //
   // RETURNS: a status code if read was successful
@@ -79,7 +79,7 @@ void readStructFromTag(uint8_t startPage) {
   uint8_t rawData[sizeof(JumperCableData)];
 
   Serial.println("Reading Pages 4 and 5 to reconstruct data");
-  if (reader.MIFARE_Read(startPage, buffer, &bufferSize) == MFRC522::StatusCode::STATUS_OK) {
+  if (reader.MIFARE_Read(TAG_START_PAGE, buffer, &bufferSize) == MFRC522::StatusCode::STATUS_OK) {
     // only copy the first n = sizeof(rawData) bytes from buffer to rawData (MIFARE_Read returns 16 bytes, we might not use all of em)
     memcpy(rawData, buffer, sizeof(rawData));
 
@@ -110,7 +110,7 @@ void readStructFromTag(uint8_t startPage) {
 }
 
 // ===== WRITE STRUCT TO TAG =====
-void writeStructToTag(const JumperCableData &data, uint8_t startPage) {
+void writeStructToTag(const JumperCableData &data) {
   // copy struct into byte array
   uint8_t byte_array[sizeof(data)];
   memcpy(byte_array, &data, sizeof(data));
@@ -139,13 +139,13 @@ void writeStructToTag(const JumperCableData &data, uint8_t startPage) {
     //
     // RETURNS: a status code if read was successful
     // ==============================
-    MFRC522::StatusCode status = reader.MIFARE_Ultralight_Write(startPage + i, pageData, sizeof(pageData));
+    MFRC522::StatusCode status = reader.MIFARE_Ultralight_Write(TAG_START_PAGE + i, pageData, sizeof(pageData));
     if (status != MFRC522::StatusCode::STATUS_OK) {
       Serial.print("Failed to write page ");
-      Serial.println(startPage + i);
+      Serial.println(TAG_START_PAGE + i);
     } else {
       Serial.print("Successfully wrote to page ");
-      Serial.println(startPage + i);
+      Serial.println(TAG_START_PAGE + i);
     }
   }
 }
@@ -168,7 +168,7 @@ void writeAllTags() {
     }
 
     Serial.println("Tag detected, writing...");
-    writeStructToTag(tags[i], TAG_START_PAGE);
+    writeStructToTag(tags[i]);
 
     // halt communication with current tag
     reader.PICC_HaltA();
@@ -191,7 +191,7 @@ void scanMode() {
   }
 
   Serial.println("Card detected:");
-  readStructFromTag(TAG_START_PAGE);
+  readStructFromTag();
 
   // Wait for removal before scanning again
   while (reader.PICC_IsNewCardPresent()) {
